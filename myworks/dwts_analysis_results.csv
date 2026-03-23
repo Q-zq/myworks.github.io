@@ -1,0 +1,56 @@
+season,week,star_name,star_age,star_occupation,partner_name,judge_score_1,judge_score_2,judge_score_3,judge_score_4,average_score,rank,eliminated,estimated_votes,predicted_elimination,rank_score,percent_score,new_score
+1,1,John Smith,30,Actor,Jane Doe,7.5,8.0,7.5,8.0,7.75,5,False,18875,False,5,7.75,7.0093749999999995
+1,1,Jane Johnson,25,Singer,John Smith,8.5,8.5,9.0,8.5,8.625,1,False,23312,False,9,8.625,8.089
+1,1,Bob Brown,35,Athlete,Mary Davis,7.0,7.5,7.0,7.5,7.25,6,False,17625,False,4,7.25,6.553125
+1,1,Sarah Lee,28,Dancer,David Wilson,8.0,8.5,8.0,8.5,8.25,3,False,21125,False,7,8.25,7.590625
+1,1,Michael Chen,40,Businessman,Emma Taylor,6.5,7.0,6.5,7.0,6.75,7,True,16375,True,3,6.75,6.096874999999999
+1,2,John Smith,30,Actor,Jane Doe,8.0,8.5,8.0,8.5,8.25,4,False,20125,False,6,8.25,7.515624999999999
+1,2,Jane Johnson,25,Singer,John Smith,9.0,9.0,9.5,9.0,9.125,1,False,23562,False,9,9.125,8.47025
+1,2,Bob Brown,35,Athlete,Mary Davis,7.5,8.0,7.5,8.0,7.75,5,False,18875,True,5,7.75,7.059374999999999
+1,2,Sarah Lee,28,Dancer,David Wilson,8.5,9.0,8.5,9.0,8.75,2,False,22375,False,8,8.75,8.096875
+1,3,John Smith,30,Actor,Jane Doe,8.5,9.0,8.5,9.0,8.75,2,False,22375,False,8,8.75,8.096875
+1,3,Jane Johnson,25,Singer,John Smith,9.5,9.5,10.0,9.5,9.625,1,False,23812,False,9,9.625,8.8015
+1,3,Bob Brown,35,Athlete,Mary Davis,8.0,8.5,8.0,8.5,8.25,3,True,21125,True,7,8.25,7.640625
+1,4,John Smith,30,Actor,Jane Doe,9.0,9.5,9.0,9.5,9.25,2,False,22625,True,8,9.25,8.428125000000001
+1,4,Jane Johnson,25,Singer,John Smith,9.5,10.0,9.5,10.0,9.75,1,False,23875,False,9,9.75,8.846874999999999
+1,5,John Smith,30,Actor,Jane Doe,9.5,10.0,9.5,10.0,9.75,1,False,23875,False,9,9.75,8.884375
+1,5,Jane Johnson,25,Singer,John Smith,9.0,9.5,9.0,9.5,9.25,2,True,22625,True,8,9.25,8.328125
+2,1,Jerry Rice,40,Football Player,Tina Johnson,7.0,7.5,7.0,7.5,7.25,6,False,17625,False,4,7.25,6.553125
+2,1,Bobby Bones,35,Radio Host,Sarah Miller,6.5,7.0,6.5,7.0,6.75,7,False,16375,True,3,6.75,6.096874999999999
+2,1,Emma Stone,28,Actress,Michael Chen,8.5,9.0,8.5,9.0,8.75,2,False,22375,False,8,8.75,8.046875
+2,1,Tom Hanks,55,Actor,Emily Davis,7.5,8.0,7.5,8.0,7.75,4,False,19875,False,6,7.75,7.1343749999999995
+2,1,Selena Gomez,29,Singer,David Wilson,9.0,9.5,9.0,9.5,9.25,1,False,23625,False,9,9.25,8.503125
+2,1,Dwayne Johnson,40,Actor,Stephanie Lee,8.0,8.5,8.0,8.5,8.25,3,False,21125,False,7,8.25,7.590625
+2,1,Kate Middleton,38,Royal,Chris Brown,7.5,8.0,7.5,8.0,7.75,5,False,18875,False,5,7.75,7.0093749999999995
+2,2,Jerry Rice,40,Football Player,Tina Johnson,7.5,8.0,7.5,8.0,7.75,5,False,18875,False,5,7.75,7.059374999999999
+2,2,Bobby Bones,35,Radio Host,Sarah Miller,7.0,7.5,7.0,7.5,7.25,6,False,17625,False,4,7.25,6.6031249999999995
+2,2,Emma Stone,28,Actress,Michael Chen,9.0,9.5,9.0,9.5,9.25,1,False,23625,False,9,9.25,8.553125000000001
+2,2,Tom Hanks,55,Actor,Emily Davis,8.0,8.5,8.0,8.5,8.25,3,False,21125,False,7,8.25,7.640625
+2,2,Selena Gomez,29,Singer,David Wilson,8.5,9.0,8.5,9.0,8.75,2,False,22375,False,8,8.75,7.996875
+2,2,Dwayne Johnson,40,Actor,Stephanie Lee,7.5,8.0,7.5,8.0,7.75,4,False,19875,False,6,7.75,7.084375
+2,2,Kate Middleton,38,Royal,Chris Brown,6.5,7.0,6.5,7.0,6.75,7,True,16375,True,3,6.75,5.996874999999999
+2,3,Jerry Rice,40,Football Player,Tina Johnson,8.0,8.5,8.0,8.5,8.25,4,False,20125,False,6,8.25,7.515624999999999
+2,3,Bobby Bones,35,Radio Host,Sarah Miller,7.5,8.0,7.5,8.0,7.75,5,False,18875,False,5,7.75,7.059374999999999
+2,3,Emma Stone,28,Actress,Michael Chen,9.5,10.0,9.5,10.0,9.75,1,False,23875,False,9,9.75,8.884375
+2,3,Tom Hanks,55,Actor,Emily Davis,8.5,9.0,8.5,9.0,8.75,2,False,22375,False,8,8.75,8.096875
+2,3,Selena Gomez,29,Singer,David Wilson,9.0,9.5,9.0,9.5,9.25,3,False,21625,False,7,9.25,8.303125
+2,3,Dwayne Johnson,40,Actor,Stephanie Lee,7.0,7.5,7.0,7.5,7.25,6,True,17625,True,4,7.25,6.503125
+2,4,Jerry Rice,40,Football Player,Tina Johnson,8.5,9.0,8.5,9.0,8.75,3,False,21375,False,7,8.75,7.971875
+2,4,Bobby Bones,35,Radio Host,Sarah Miller,8.0,8.5,8.0,8.5,8.25,4,False,20125,True,6,8.25,7.515624999999999
+2,4,Emma Stone,28,Actress,Michael Chen,9.5,10.0,9.5,10.0,9.75,1,False,23875,False,9,9.75,8.834375
+2,4,Tom Hanks,55,Actor,Emily Davis,9.0,9.5,9.0,9.5,9.25,2,False,22625,False,8,9.25,8.428125000000001
+2,4,Selena Gomez,29,Singer,David Wilson,8.5,9.0,8.5,9.0,8.75,3,False,21375,False,7,8.75,7.871875
+2,5,Jerry Rice,40,Football Player,Tina Johnson,9.0,9.5,9.0,9.5,9.25,2,False,22625,False,8,9.25,8.428125000000001
+2,5,Bobby Bones,35,Radio Host,Sarah Miller,8.5,9.0,8.5,9.0,8.75,3,False,21375,False,7,8.75,7.971875
+2,5,Emma Stone,28,Actress,Michael Chen,10.0,10.0,10.0,10.0,10.0,1,False,24000,False,9,10.0,9.025
+2,5,Tom Hanks,55,Actor,Emily Davis,8.0,8.5,8.0,8.5,8.25,4,True,20125,True,6,8.25,7.365625
+2,6,Jerry Rice,40,Football Player,Tina Johnson,9.5,10.0,9.5,10.0,9.75,2,False,22875,False,8,9.75,8.759375
+2,6,Bobby Bones,35,Radio Host,Sarah Miller,9.0,9.5,9.0,9.5,9.25,3,False,21625,True,7,9.25,8.303125
+2,6,Emma Stone,28,Actress,Michael Chen,10.0,10.0,10.0,10.0,10.0,1,False,24000,False,9,10.0,9.0
+2,7,Jerry Rice,40,Football Player,Tina Johnson,9.5,10.0,9.5,10.0,9.75,2,True,22875,True,8,9.75,8.709375
+2,7,Bobby Bones,35,Radio Host,Sarah Miller,9.5,10.0,9.5,10.0,9.75,2,False,22875,True,8,9.75,8.759375
+2,7,Emma Stone,28,Actress,Michael Chen,10.0,10.0,10.0,10.0,10.0,1,False,24000,False,9,10.0,9.0
+2,8,Bobby Bones,35,Radio Host,Sarah Miller,9.5,10.0,9.5,10.0,9.75,2,False,22875,True,8,9.75,8.709375
+2,8,Emma Stone,28,Actress,Michael Chen,10.0,10.0,10.0,10.0,10.0,1,False,24000,False,9,10.0,9.0
+2,9,Bobby Bones,35,Radio Host,Sarah Miller,10.0,10.0,10.0,10.0,10.0,1,False,24000,True,9,10.0,9.025
+2,9,Emma Stone,28,Actress,Michael Chen,10.0,10.0,10.0,10.0,10.0,1,False,24000,True,9,10.0,9.0
