@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>发表作品</title>
+    <style>
+        /* 全局样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        /* 容器 */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        /* 头部 */
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        /* 表单容器 */
+        .form-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            border-left: 5px solid #dc3545;
+        }
+        
+        /* 表单组 */
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #dc3545;
+            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+        }
+        
+        .form-group textarea {
+            min-height: 300px;
+            resize: vertical;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        /* 按钮 */
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background-color: #dc3545;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #c82333;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+        }
+        
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+            margin-right: 15px;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+        
+        /* 按钮组 */
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        /* 消息提示 */
+        .message {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        /* 导航链接 */
+        .nav-links {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .nav-links a {
+            color: #333;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            color: #dc3545;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 15px;
+            }
+            
+            .form-container {
+                padding: 25px;
+            }
+            
+            header h1 {
+                font-size: 2em;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 导航链接 -->
+        <div class="nav-links">
+            <a href="index.html">首页</a>
+            <a href="community.html">社区</a>
+            <a href="auth.html" id="userLink">登录/注册</a>
+        </div>
+        
+        <!-- 头部 -->
+        <header>
+            <h1>发表你的作品</h1>
+            <p>分享你的冒险、创作和感悟</p>
+        </header>
+        
+        <!-- 消息提示 -->
+        <div id="message" class="message" style="display: none;"></div>
+        
+        <!-- 表单容器 -->
+        <div class="form-container">
+            <form id="submitForm">
+                <div class="form-group">
+                    <label for="title">标题</label>
+                    <input type="text" id="title" name="title" placeholder="请输入作品标题" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="content">内容</label>
+                    <textarea id="content" name="content" placeholder="在这里写下你的作品..." required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="category">分类</label>
+                    <input type="text" id="category" name="category" placeholder="例如：随笔、故事、诗歌等">
+                </div>
+                
+                <div class="btn-group">
+                    <a href="index.html" class="btn btn-secondary">取消</a>
+                    <button type="submit" class="btn btn-primary">发表作品</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        // 检查用户是否登录
+        function checkLoginStatus() {
+            const user = localStorage.getItem('currentUser');
+            const userLink = document.getElementById('userLink');
+            
+            if (user) {
+                userLink.textContent = '我的账户';
+                userLink.href = 'profile.html';
+            } else {
+                userLink.textContent = '登录/注册';
+                userLink.href = 'auth.html';
+            }
+        }
+        
+        // 提交表单
+        document.getElementById('submitForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // 获取表单数据
+            const title = document.getElementById('title').value;
+            const content = document.getElementById('content').value;
+            const category = document.getElementById('category').value;
+            
+            // 检查用户是否登录
+            const currentUser = localStorage.getItem('currentUser');
+            if (!currentUser) {
+                showMessage('请先登录再发表作品', 'error');
+                setTimeout(() => {
+                    window.location.href = 'auth.html';
+                }, 1500);
+                return;
+            }
+            
+            // 创建作品对象
+            const user = JSON.parse(currentUser);
+            const work = {
+                id: Date.now(),
+                title: title,
+                content: content,
+                category: category,
+                author: user.username,
+                authorId: user.id,
+                createdAt: new Date().toISOString()
+            };
+            
+            // 保存作品到本地存储
+            saveWork(work);
+            
+            // 显示成功消息
+            showMessage('作品发表成功！', 'success');
+            
+            // 重置表单
+            document.getElementById('submitForm').reset();
+            
+            // 3秒后跳转到社区页面
+            setTimeout(() => {
+                window.location.href = 'community.html';
+            }, 2000);
+        });
+        
+        // 保存作品到本地存储
+        function saveWork(work) {
+            // 获取现有作品
+            let works = JSON.parse(localStorage.getItem('works') || '[]');
+            
+            // 添加新作品
+            works.unshift(work);
+            
+            // 保存回本地存储
+            localStorage.setItem('works', JSON.stringify(works));
+            
+            // 更新用户的作品列表
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            let users = JSON.parse(localStorage.getItem('users') || '[]');
+            
+            const userIndex = users.findIndex(u => u.id === currentUser.id);
+            if (userIndex !== -1) {
+                if (!users[userIndex].works) {
+                    users[userIndex].works = [];
+                }
+                users[userIndex].works.unshift(work.id);
+                localStorage.setItem('users', JSON.stringify(users));
+                localStorage.setItem('currentUser', JSON.stringify(users[userIndex]));
+            }
+        }
+        
+        // 显示消息
+        function showMessage(text, type) {
+            const message = document.getElementById('message');
+            message.textContent = text;
+            message.className = `message ${type}`;
+            message.style.display = 'block';
+            
+            // 3秒后隐藏消息
+            setTimeout(() => {
+                message.style.display = 'none';
+            }, 3000);
+        }
+        
+        // 页面加载时检查登录状态
+        window.onload = function() {
+            checkLoginStatus();
+        };
+    </script>
+</body>
+</html>
