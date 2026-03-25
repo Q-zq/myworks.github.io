@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据导出/导入 - 跨设备同步</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .nav-links {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .nav-links a {
+            color: #333;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #dc3545;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+            border-left: 5px solid #dc3545;
+        }
+
+        .card h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .card p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .btn-primary {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #c82333;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+        .data-preview {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .data-preview pre {
+            margin: 0;
+            font-size: 0.85em;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-item {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #dc3545;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+        .file-input-wrapper input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .message.info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .instructions {
+            background-color: #e7f3ff;
+            border: 1px solid #b8daff;
+            color: #004085;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+
+        .instructions h3 {
+            margin-bottom: 10px;
+        }
+
+        .instructions ol {
+            margin-left: 20px;
+        }
+
+        .instructions li {
+            margin-bottom: 8px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 0.9em;
+            resize: vertical;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 15px;
+            }
+
+            header h1 {
+                font-size: 2em;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .btn {
+                width: 100%;
+                margin-right: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 导航链接 -->
+        <div class="nav-links">
+            <a href="index.html">首页</a>
+            <a href="community.html">社区</a>
+            <a href="auth.html">登录/注册</a>
+        </div>
+
+        <!-- 头部 -->
+        <header>
+            <h1>数据导出/导入</h1>
+            <p>跨设备同步你的账号和作品</p>
+        </header>
+
+        <!-- 使用说明 -->
+        <div class="instructions">
+            <h3>📱 跨设备同步说明</h3>
+            <ol>
+                <li>在<strong>当前设备</strong>导出数据，保存 JSON 文件</li>
+                <li>将 JSON 文件传输到<strong>新设备</strong>（通过微信、邮件、云盘等）</li>
+                <li>在新设备打开此页面，导入 JSON 文件</li>
+                <li>完成！你的账号和作品现在可以在新设备上使用了</li>
+            </ol>
+        </div>
+
+        <!-- 消息提示 -->
+        <div id="message" class="message" style="display: none;"></div>
+
+        <!-- 数据统计 -->
+        <div class="card">
+            <h2>📊 当前数据</h2>
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="userCount">0</div>
+                    <div class="stat-label">注册用户</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="workCount">0</div>
+                    <div class="stat-label">作品数量</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 导出数据 -->
+        <div class="card">
+            <h2>📤 导出数据</h2>
+            <p>将当前设备的所有数据导出为 JSON 文件，用于备份或迁移到其他设备。</p>
+
+            <div class="data-preview" id="exportPreview" style="display: none;">
+                <pre id="exportData"></pre>
+            </div>
+
+            <div>
+                <button class="btn btn-secondary" onclick="previewData()">预览数据</button>
+                <button class="btn btn-primary" onclick="exportData()">导出为 JSON 文件</button>
+                <button class="btn btn-success" onclick="copyToClipboard()">复制到剪贴板</button>
+            </div>
+        </div>
+
+        <!-- 导入数据 -->
+        <div class="card">
+            <h2>📥 导入数据</h2>
+            <p>从 JSON 文件导入数据到当前设备。这将合并现有数据，不会删除已有内容。</p>
+
+            <div style="margin-bottom: 20px;">
+                <div class="file-input-wrapper">
+                    <button class="btn btn-secondary">选择 JSON 文件</button>
+                    <input type="file" id="fileInput" accept=".json" onchange="handleFileSelect(event)">
+                </div>
+                <span id="fileName" style="color: #666; margin-left: 10px;"></span>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <p>或者直接将 JSON 数据粘贴到下方：</p>
+                <textarea id="importText" placeholder='{"users": [...], "works": [...]}'></textarea>
+            </div>
+
+            <div>
+                <button class="btn btn-primary" onclick="importFromText()">从文本导入</button>
+                <button class="btn btn-secondary" onclick="clearImport()">清空</button>
+            </div>
+        </div>
+
+        <!-- 清空数据 -->
+        <div class="card">
+            <h2>🗑️ 清空数据</h2>
+            <p style="color: #dc3545;"><strong>警告：</strong>此操作将删除当前设备的所有数据，包括账号和作品！请确保已导出备份。</p>
+            <button class="btn btn-secondary" onclick="clearAllData()" style="background-color: #dc3545;">清空所有数据</button>
+        </div>
+    </div>
+
+    <script src="database.js"></script>
+    <script>
+        // 页面加载时更新统计
+        window.onload = function() {
+            updateStats();
+
+            // 初始化数据库
+            if (window.Database) {
+                Database.init();
+            }
+        };
+
+        // 更新统计数据
+        function updateStats() {
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const works = JSON.parse(localStorage.getItem('works') || '[]');
+
+            document.getElementById('userCount').textContent = users.length;
+            document.getElementById('workCount').textContent = works.length;
+        }
+
+        // 获取导出数据
+        function getExportData() {
+            const data = {
+                users: JSON.parse(localStorage.getItem('users') || '[]'),
+                works: JSON.parse(localStorage.getItem('works') || '[]'),
+                exportTime: new Date().toISOString(),
+                version: '1.0'
+            };
+            return data;
+        }
+
+        // 预览数据
+        function previewData() {
+            const data = getExportData();
+            const preview = document.getElementById('exportPreview');
+            const dataEl = document.getElementById('exportData');
+
+            dataEl.textContent = JSON.stringify(data, null, 2);
+            preview.style.display = 'block';
+        }
+
+        // 导出数据为文件
+        function exportData() {
+            const data = getExportData();
+            const jsonStr = JSON.stringify(data, null, 2);
+            const blob = new Blob([jsonStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `essays-backup-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showMessage('数据导出成功！', 'success');
+        }
+
+        // 复制到剪贴板
+        async function copyToClipboard() {
+            const data = getExportData();
+            const jsonStr = JSON.stringify(data, null, 2);
+
+            try {
+                await navigator.clipboard.writeText(jsonStr);
+                showMessage('数据已复制到剪贴板！', 'success');
+            } catch (err) {
+                showMessage('复制失败，请手动复制预览中的数据', 'error');
+                previewData();
+            }
+        }
+
+        // 处理文件选择
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            document.getElementById('fileName').textContent = file.name;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    importData(data);
+                } catch (error) {
+                    showMessage('文件格式错误：' + error.message, 'error');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // 从文本导入
+        function importFromText() {
+            const text = document.getElementById('importText').value.trim();
+            if (!text) {
+                showMessage('请输入 JSON 数据', 'error');
+                return;
+            }
+
+            try {
+                const data = JSON.parse(text);
+                importData(data);
+            } catch (error) {
+                showMessage('JSON 格式错误：' + error.message, 'error');
+            }
+        }
+
+        // 导入数据
+        function importData(data) {
+            if (!data.users || !Array.isArray(data.users)) {
+                showMessage('数据格式错误：缺少 users 数组', 'error');
+                return;
+            }
+
+            if (!data.works || !Array.isArray(data.works)) {
+                showMessage('数据格式错误：缺少 works 数组', 'error');
+                return;
+            }
+
+            // 合并用户数据
+            const existingUsers = JSON.parse(localStorage.getItem('users') || '[]');
+            const userMap = new Map();
+
+            existingUsers.forEach(user => userMap.set(user.id, user));
+            data.users.forEach(user => {
+                const existing = userMap.get(user.id);
+                if (!existing) {
+                    userMap.set(user.id, user);
+                }
+            });
+
+            const mergedUsers = Array.from(userMap.values());
+
+            // 合并作品数据
+            const existingWorks = JSON.parse(localStorage.getItem('works') || '[]');
+            const workMap = new Map();
+
+            existingWorks.forEach(work => workMap.set(work.id, work));
+            data.works.forEach(work => {
+                const existing = workMap.get(work.id);
+                if (!existing) {
+                    workMap.set(work.id, work);
+                }
+            });
+
+            const mergedWorks = Array.from(workMap.values());
+
+            // 保存到本地存储
+            localStorage.setItem('users', JSON.stringify(mergedUsers));
+            localStorage.setItem('works', JSON.stringify(mergedWorks));
+
+            // 更新数据库缓存
+            if (window.Database) {
+                Database.cache.users = mergedUsers;
+                Database.cache.works = mergedWorks;
+            }
+
+            // 更新统计
+            updateStats();
+
+            // 清空导入文本
+            document.getElementById('importText').value = '';
+            document.getElementById('fileName').textContent = '';
+            document.getElementById('fileInput').value = '';
+
+            showMessage(`导入成功！新增 ${data.users.length} 个用户，${data.works.length} 篇作品`, 'success');
+        }
+
+        // 清空导入区域
+        function clearImport() {
+            document.getElementById('importText').value = '';
+            document.getElementById('fileName').textContent = '';
+            document.getElementById('fileInput').value = '';
+        }
+
+        // 清空所有数据
+        function clearAllData() {
+            if (!confirm('确定要清空所有数据吗？此操作不可恢复！')) {
+                return;
+            }
+
+            if (!confirm('再次确认：你真的要删除所有账号和作品吗？')) {
+                return;
+            }
+
+            localStorage.removeItem('users');
+            localStorage.removeItem('works');
+            localStorage.removeItem('currentUser');
+
+            if (window.Database) {
+                Database.cache.users = [];
+                Database.cache.works = [];
+            }
+
+            updateStats();
+            showMessage('所有数据已清空', 'info');
+        }
+
+        // 显示消息
+        function showMessage(text, type) {
+            const message = document.getElementById('message');
+            message.textContent = text;
+            message.className = `message ${type}`;
+            message.style.display = 'block';
+
+            setTimeout(() => {
+                message.style.display = 'none';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
