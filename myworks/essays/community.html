@@ -11,38 +11,38 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Arial', sans-serif;
             background-color: #f8f9fa;
             color: #333;
             line-height: 1.6;
         }
-        
+
         /* 容器 */
         .container {
             max-width: 800px;
             margin: 0 auto;
             padding: 40px 20px;
         }
-        
+
         /* 头部 */
         header {
             text-align: center;
             margin-bottom: 40px;
         }
-        
+
         header h1 {
             font-size: 2.5em;
             color: #333;
             margin-bottom: 10px;
         }
-        
+
         header p {
             color: #666;
             font-size: 1.1em;
         }
-        
+
         /* 作品列表 */
         .works-list {
             background-color: white;
@@ -50,44 +50,44 @@
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             padding: 30px;
         }
-        
+
         /* 作品项 */
         .work-item {
             border-bottom: 1px solid #eee;
             padding: 25px 0;
         }
-        
+
         .work-item:last-child {
             border-bottom: none;
         }
-        
+
         .work-item h2 {
             color: #333;
             margin-bottom: 10px;
             font-size: 1.5em;
         }
-        
+
         .work-item .work-meta {
             color: #666;
             font-size: 0.9em;
             margin-bottom: 15px;
         }
-        
+
         .work-item .work-meta span {
             margin-right: 15px;
         }
-        
+
         .work-item .work-content {
             color: #555;
             margin-bottom: 20px;
             line-height: 1.6;
         }
-        
+
         .work-item .work-actions {
             display: flex;
             gap: 10px;
         }
-        
+
         /* 按钮 */
         .btn {
             display: inline-block;
@@ -101,26 +101,26 @@
             text-decoration: none;
             text-align: center;
         }
-        
+
         .btn-primary {
             background-color: #dc3545;
             color: white;
         }
-        
+
         .btn-primary:hover {
             background-color: #c82333;
             transform: translateY(-2px);
         }
-        
+
         .btn-secondary {
             background-color: #6c757d;
             color: white;
         }
-        
+
         .btn-secondary:hover {
             background-color: #5a6268;
         }
-        
+
         /* 消息提示 */
         .message {
             padding: 15px;
@@ -128,36 +128,42 @@
             margin-bottom: 20px;
             text-align: center;
         }
-        
+
         .message.success {
             background-color: #d4edda;
             color: #155724;
             border: 1px solid #c3e6cb;
         }
-        
+
         .message.error {
             background-color: #f8d7da;
             color: #721c24;
             border: 1px solid #f5c6cb;
         }
-        
+
+        .message.info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
         /* 空状态 */
         .empty-state {
             text-align: center;
             padding: 60px 20px;
             color: #666;
         }
-        
+
         .empty-state h3 {
             margin-bottom: 10px;
         }
-        
+
         /* 导航链接 */
         .nav-links {
             margin-bottom: 30px;
             text-align: center;
         }
-        
+
         .nav-links a {
             color: #333;
             text-decoration: none;
@@ -165,25 +171,51 @@
             font-weight: bold;
             transition: color 0.3s ease;
         }
-        
+
         .nav-links a:hover {
             color: #dc3545;
         }
-        
+
+        /* 同步按钮 */
+        .sync-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .sync-btn {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .sync-btn:hover {
+            background-color: #218838;
+        }
+
+        .sync-btn:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+
         /* 响应式设计 */
         @media (max-width: 768px) {
             .container {
                 padding: 20px 15px;
             }
-            
+
             header h1 {
                 font-size: 2em;
             }
-            
+
             .works-list {
                 padding: 20px;
             }
-            
+
             .work-item h2 {
                 font-size: 1.3em;
             }
@@ -199,16 +231,26 @@
             <a href="community.html">社区</a>
             <a href="auth.html" id="userLink">登录/注册</a>
         </div>
-        
+
         <!-- 头部 -->
         <header>
             <h1>社区</h1>
             <p>看见美，看见共鸣</p>
         </header>
-        
+
+        <!-- 同步区域 -->
+        <div class="sync-section">
+            <button class="sync-btn" id="syncBtn" onclick="syncFromCloud()">
+                🔄 从云端同步数据
+            </button>
+            <p style="font-size: 0.85em; color: #666; margin-top: 10px;">
+                点击同步可以获取最新的作品数据
+            </p>
+        </div>
+
         <!-- 消息提示 -->
         <div id="message" class="message" style="display: none;"></div>
-        
+
         <!-- 作品列表 -->
         <div class="works-list">
             <div id="worksContainer">
@@ -216,14 +258,14 @@
             </div>
         </div>
     </div>
-    
-    <script src="sync-script.js"></script>
+
+    <script src="database.js"></script>
     <script>
         // 检查用户登录状态
         function checkLoginStatus() {
             const user = localStorage.getItem('currentUser');
             const userLink = document.getElementById('userLink');
-            
+
             if (user) {
                 userLink.textContent = '个人中心';
                 userLink.href = 'profile.html';
@@ -232,12 +274,48 @@
                 userLink.href = 'auth.html';
             }
         }
-        
+
+        // 从云端同步数据
+        async function syncFromCloud() {
+            const syncBtn = document.getElementById('syncBtn');
+            syncBtn.disabled = true;
+            syncBtn.textContent = '🔄 同步中...';
+
+            try {
+                if (window.Database) {
+                    const result = await Database.syncFromCloud();
+                    if (result) {
+                        showMessage('同步成功！已获取最新数据', 'success');
+                    } else {
+                        showMessage('同步失败，显示本地数据', 'error');
+                    }
+                } else {
+                    showMessage('数据库模块未加载', 'error');
+                }
+
+                // 重新加载作品列表
+                loadCommunityWorks();
+            } catch (error) {
+                console.error('同步失败:', error);
+                showMessage('同步失败: ' + error.message, 'error');
+            } finally {
+                syncBtn.disabled = false;
+                syncBtn.textContent = '🔄 从云端同步数据';
+            }
+        }
+
         // 加载社区作品
         function loadCommunityWorks() {
             const worksContainer = document.getElementById('worksContainer');
-            const works = JSON.parse(localStorage.getItem('works') || '[]');
-            
+
+            // 使用 Database 获取作品
+            let works = [];
+            if (window.Database) {
+                works = Database.getAllWorks();
+            } else {
+                works = JSON.parse(localStorage.getItem('works') || '[]');
+            }
+
             if (works.length === 0) {
                 worksContainer.innerHTML = `
                     <div class="empty-state">
@@ -248,50 +326,128 @@
                 `;
                 return;
             }
-            
+
             // 按创建时间排序（最新的在前）
             works.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-            
+
             // 渲染作品列表
             worksContainer.innerHTML = works.map(work => `
                 <div class="work-item">
-                    <h2>${work.title}</h2>
+                    <h2>${escapeHtml(work.title)}</h2>
                     <div class="work-meta">
-                        <span><strong>作者：</strong>${work.author}</span>
+                        <span><strong>作者：</strong>${escapeHtml(work.author)}</span>
                         <span><strong>发布时间：</strong>${new Date(work.createdAt).toLocaleString()}</span>
-                        ${work.category ? `<span><strong>分类：</strong>${work.category}</span>` : ''}
+                        ${work.category ? `<span><strong>分类：</strong>${escapeHtml(work.category)}</span>` : ''}
                     </div>
-                    <div class="work-content">${work.content.substring(0, 150)}${work.content.length > 150 ? '...' : ''}</div>
+                    <div class="work-content">${escapeHtml(work.content.substring(0, 150))}${work.content.length > 150 ? '...' : ''}</div>
                     <div class="work-actions">
-                        <a href="#" class="btn btn-secondary" onclick="viewWork(${work.id})">查看详情</a>
+                        <button class="btn btn-secondary" onclick="viewWork(${work.id})">查看详情</button>
                     </div>
                 </div>
             `).join('');
         }
-        
+
+        // HTML 转义函数
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
         // 查看作品详情
         function viewWork(workId) {
-            // 这里可以实现作品详情页
-            alert('查看作品详情功能开发中');
+            let work = null;
+            if (window.Database) {
+                work = Database.getWorkById(workId);
+            } else {
+                const works = JSON.parse(localStorage.getItem('works') || '[]');
+                work = works.find(w => w.id === workId);
+            }
+
+            if (work) {
+                // 创建模态框显示完整内容
+                const modal = document.createElement('div');
+                modal.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0,0,0,0.5);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 1000;
+                    padding: 20px;
+                `;
+
+                modal.innerHTML = `
+                    <div style="
+                        background: white;
+                        max-width: 700px;
+                        width: 100%;
+                        max-height: 80vh;
+                        overflow-y: auto;
+                        border-radius: 10px;
+                        padding: 30px;
+                        position: relative;
+                    ">
+                        <button onclick="this.closest('.modal').remove()" style="
+                            position: absolute;
+                            top: 15px;
+                            right: 15px;
+                            background: none;
+                            border: none;
+                            font-size: 1.5em;
+                            cursor: pointer;
+                        ">×</button>
+                        <h2>${escapeHtml(work.title)}</h2>
+                        <div style="color: #666; margin: 15px 0; font-size: 0.9em;">
+                            <span>作者：${escapeHtml(work.author)}</span> |
+                            <span>${new Date(work.createdAt).toLocaleString()}</span>
+                            ${work.category ? ` | <span>分类：${escapeHtml(work.category)}</span>` : ''}
+                        </div>
+                        <div style="line-height: 1.8; white-space: pre-wrap;">${escapeHtml(work.content)}</div>
+                    </div>
+                `;
+
+                modal.className = 'modal';
+                modal.onclick = function(e) {
+                    if (e.target === modal) {
+                        modal.remove();
+                    }
+                };
+
+                document.body.appendChild(modal);
+            }
         }
-        
+
         // 显示消息
         function showMessage(text, type) {
             const message = document.getElementById('message');
             message.textContent = text;
             message.className = `message ${type}`;
             message.style.display = 'block';
-            
+
             // 3秒后隐藏消息
             setTimeout(() => {
                 message.style.display = 'none';
             }, 3000);
         }
-        
+
         // 页面加载时
         window.onload = function() {
             checkLoginStatus();
-            loadCommunityWorks();
+
+            // 初始化数据库
+            if (window.Database) {
+                Database.init().then(() => {
+                    loadCommunityWorks();
+                });
+            } else {
+                loadCommunityWorks();
+            }
         };
     </script>
 </body>
