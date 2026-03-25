@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub 部署指南</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        h2 {
+            color: #555;
+            margin-top: 30px;
+        }
+        p {
+            margin-bottom: 15px;
+        }
+        .step {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-left: 4px solid #007bff;
+        }
+        code {
+            background-color: #f1f1f1;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        .warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+        .success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>GitHub 部署指南</h1>
+        <p>本指南将帮助您将 essays 目录部署到 GitHub Pages，实现自动更新。</p>
+
+        <h2>步骤 1：获取 GitHub 个人访问令牌</h2>
+        <div class="step">
+            <ol>
+                <li>登录您的 GitHub 账号：<a href="https://github.com" target="_blank">https://github.com</a></li>
+                <li>点击右上角的头像，选择「Settings」</li>
+                <li>在左侧菜单中选择「Developer settings」</li>
+                <li>选择「Personal access tokens」→「Tokens (classic)」</li>
+                <li>点击「Generate new token」按钮</li>
+                <li>填写 token 名称（例如：deploy-token）</li>
+                <li>在「Select scopes」中勾选「repo」权限</li>
+                <li>点击「Generate token」按钮</li>
+                <li>复制生成的 token（请妥善保存，token 只会显示一次）</li>
+            </ol>
+        </div>
+
+        <h2>步骤 2：配置部署脚本</h2>
+        <div class="step">
+            <ol>
+                <li>打开 <code>simple-deploy.js</code> 文件</li>
+                <li>将第 6 行的 <code>GITHUB_TOKEN</code> 值替换为您刚才生成的 token</li>
+                <li>保存文件</li>
+            </ol>
+        </div>
+
+        <h2>步骤 3：运行部署脚本</h2>
+        <div class="step">
+            <ol>
+                <li>在 essays 目录中打开终端</li>
+                <li>运行命令：<code>node simple-deploy.js</code></li>
+                <li>等待部署完成</li>
+            </ol>
+        </div>
+
+        <h2>步骤 4：验证部署结果</h2>
+        <div class="step">
+            <ol>
+                <li>访问您的 GitHub Pages 网站：<a href="https://q-zq.github.io/myworks.github.io/myworks/essays/" target="_blank">https://q-zq.github.io/myworks.github.io/myworks/essays/</a></li>
+                <li>确认网站内容已更新</li>
+            </ol>
+        </div>
+
+        <h2>自动部署设置</h2>
+        <div class="step">
+            <p>要实现文件变化时自动部署，可以使用以下方法：</p>
+            <h3>方法 1：手动运行脚本</h3>
+            <p>每次修改文件后，手动运行 <code>node simple-deploy.js</code> 命令。</p>
+
+            <h3>方法 2：使用 PowerShell 监控</h3>
+            <ol>
+                <li>创建一个名为 <code>watch.ps1</code> 的文件</li>
+                <li>将以下内容复制到文件中：</li>
+                <pre><code>$watcher = New-Object System.IO.FileSystemWatcher
+$watcher.Path = "."
+$watcher.Filter = "*.*"
+$watcher.IncludeSubdirectories = $true
+$watcher.EnableRaisingEvents = $true
+
+$action = {
+    $path = $Event.SourceEventArgs.FullPath
+    $changeType = $Event.SourceEventArgs.ChangeType
+    Write-Host "文件 $changeType: $path"
+    Write-Host "触发部署..."
+    node simple-deploy.js
+}
+
+Register-ObjectEvent $watcher "Changed" -Action $action
+Register-ObjectEvent $watcher "Created" -Action $action
+Register-ObjectEvent $watcher "Deleted" -Action $action
+
+Write-Host "监控已启动，文件变化时将自动部署"
+while ($true) { Start-Sleep 1 }
+</code></pre>
+                <li>运行命令：<code>powershell -ExecutionPolicy Bypass -File watch.ps1</code></li>
+            </ol>
+        </div>
+
+        <div class="warning">
+            <h3>注意事项</h3>
+            <ul>
+                <li>确保 GitHub 令牌具有 <code>repo</code> 权限</li>
+                <li>不要将令牌分享给他人</li>
+                <li>对于大型文件，可能会遇到 GitHub API 的大小限制</li>
+                <li>部署过程中会在终端显示详细的日志信息</li>
+            </ul>
+        </div>
+
+        <div class="success">
+            <h3>部署成功</h3>
+            <p>当您看到终端显示「部署完成！」时，说明文件已成功上传到 GitHub。</p>
+        </div>
+    </div>
+</body>
+</html>
