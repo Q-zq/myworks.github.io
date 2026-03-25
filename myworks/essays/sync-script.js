@@ -95,3 +95,11 @@ window.addEventListener('storage', async function(event) {
     console.log('存储变化，需要同步到 GitHub');
   }
 });
+
+// 手动触发同步
+function syncData() {
+  syncFromGitHub();
+}
+
+// 暴露同步函数到全局
+window.syncData = syncData;
