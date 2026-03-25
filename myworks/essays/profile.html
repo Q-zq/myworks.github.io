@@ -43,23 +43,24 @@
             font-size: 1.1em;
         }
         
-        /* 用户信息 */
-        .user-info {
+        /* 用户信息卡片 */
+        .user-card {
             background-color: white;
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             padding: 30px;
             margin-bottom: 30px;
-            border-left: 5px solid #dc3545;
+            text-align: center;
         }
         
-        .user-info h2 {
+        .user-card h2 {
             color: #333;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         
-        .user-info p {
-            margin-bottom: 10px;
+        .user-card p {
+            color: #666;
+            margin-bottom: 20px;
         }
         
         /* 作品列表 */
@@ -68,11 +69,6 @@
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             padding: 30px;
-        }
-        
-        .works-list h2 {
-            color: #333;
-            margin-bottom: 20px;
         }
         
         /* 作品项 */
@@ -88,6 +84,7 @@
         .work-item h3 {
             color: #333;
             margin-bottom: 10px;
+            font-size: 1.3em;
         }
         
         .work-item .work-meta {
@@ -96,7 +93,7 @@
             margin-bottom: 10px;
         }
         
-        .work-item .work-excerpt {
+        .work-item .work-content {
             color: #555;
             margin-bottom: 15px;
             line-height: 1.6;
@@ -138,6 +135,15 @@
         
         .btn-secondary:hover {
             background-color: #5a6268;
+        }
+        
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background-color: #c82333;
         }
         
         /* 消息提示 */
@@ -199,9 +205,13 @@
                 font-size: 2em;
             }
             
-            .user-info,
+            .user-card,
             .works-list {
                 padding: 20px;
+            }
+            
+            .work-item h3 {
+                font-size: 1.1em;
             }
         }
     </style>
@@ -213,24 +223,23 @@
             <a href="index.html">首页</a>
             <a href="submit.html">发表作品</a>
             <a href="community.html">社区</a>
-            <a href="#" id="logoutLink">退出登录</a>
+            <a href="auth.html" id="userLink">登录/注册</a>
         </div>
         
         <!-- 头部 -->
         <header>
             <h1>个人中心</h1>
-            <p>查看和管理你的作品</p>
+            <p>管理你的作品和个人信息</p>
         </header>
         
         <!-- 消息提示 -->
         <div id="message" class="message" style="display: none;"></div>
         
-        <!-- 用户信息 -->
-        <div class="user-info">
+        <!-- 用户信息卡片 -->
+        <div class="user-card" id="userCard">
             <h2>用户信息</h2>
-            <p><strong>用户名：</strong><span id="username"></span></p>
-            <p><strong>注册时间：</strong><span id="registerTime"></span></p>
-            <p><strong>作品数量：</strong><span id="workCount"></span></p>
+            <p id="usernameDisplay">用户名</p>
+            <button class="btn btn-secondary" onclick="logout()">退出登录</button>
         </div>
         
         <!-- 作品列表 -->
@@ -243,68 +252,73 @@
     </div>
     
     <script>
-        // 检查用户是否登录
+        // 检查用户登录状态
         function checkLoginStatus() {
             const user = localStorage.getItem('currentUser');
+            const userLink = document.getElementById('userLink');
             
-            if (!user) {
-                showMessage('请先登录', 'error');
-                setTimeout(() => {
-                    window.location.href = 'auth.html';
-                }, 1500);
-                return false;
+            if (user) {
+                userLink.textContent = '个人中心';
+                userLink.href = 'profile.html';
+                return JSON.parse(user);
+            } else {
+                userLink.textContent = '登录/注册';
+                userLink.href = 'auth.html';
+                return null;
             }
-            
-            return JSON.parse(user);
         }
         
         // 加载用户信息
         function loadUserInfo(user) {
-            document.getElementById('username').textContent = user.username;
-            document.getElementById('registerTime').textContent = new Date(user.id).toLocaleString();
-            document.getElementById('workCount').textContent = user.works ? user.works.length : 0;
+            if (user) {
+                document.getElementById('usernameDisplay').textContent = `用户名：${user.username}`;
+            }
         }
         
         // 加载用户作品
         function loadUserWorks(user) {
             const worksContainer = document.getElementById('worksContainer');
-            const works = JSON.parse(localStorage.getItem('works') || '[]');
+            const allWorks = JSON.parse(localStorage.getItem('works') || '[]');
             
-            // 过滤用户的作品
-            const userWorks = works.filter(work => work.authorId === user.id);
+            // 筛选用户的作品
+            const userWorks = allWorks.filter(work => work.authorId === user.id);
             
             if (userWorks.length === 0) {
                 worksContainer.innerHTML = `
                     <div class="empty-state">
-                        <h3>还没有作品</h3>
-                        <p>去发表你的第一篇作品吧！</p>
+                        <h3>你还没有发表作品</h3>
+                        <p>开始创作你的第一个作品吧！</p>
                         <a href="submit.html" class="btn btn-primary">发表作品</a>
                     </div>
                 `;
                 return;
             }
             
+            // 按创建时间排序（最新的在前）
+            userWorks.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            
             // 渲染作品列表
             worksContainer.innerHTML = userWorks.map(work => `
                 <div class="work-item">
                     <h3>${work.title}</h3>
                     <div class="work-meta">
-                        <span>${new Date(work.createdAt).toLocaleString()}</span>
-                        ${work.category ? `<span> · ${work.category}</span>` : ''}
+                        <span><strong>发布时间：</strong>${new Date(work.createdAt).toLocaleString()}</span>
+                        ${work.category ? `<span><strong>分类：</strong>${work.category}</span>` : ''}
                     </div>
-                    <div class="work-excerpt">${work.content.substring(0, 100)}${work.content.length > 100 ? '...' : ''}</div>
+                    <div class="work-content">${work.content.substring(0, 150)}${work.content.length > 150 ? '...' : ''}</div>
                     <div class="work-actions">
-                        <a href="#" class="btn btn-secondary" onclick="viewWork(${work.id})">查看</a>
+                        <a href="#" class="btn btn-secondary" onclick="viewWork(${work.id})">查看详情</a>
                         <a href="#" class="btn btn-primary" onclick="editWork(${work.id})">编辑</a>
+                        <a href="#" class="btn btn-danger" onclick="deleteWork(${work.id})">删除</a>
                     </div>
                 </div>
             `).join('');
         }
         
-        // 查看作品
+        // 查看作品详情
         function viewWork(workId) {
             // 这里可以实现作品详情页
-            alert('查看作品功能开发中');
+            alert('查看作品详情功能开发中');
         }
         
         // 编辑作品
@@ -313,15 +327,49 @@
             alert('编辑作品功能开发中');
         }
         
+        // 删除作品
+        function deleteWork(workId) {
+            if (confirm('确定要删除这个作品吗？')) {
+                // 获取所有作品
+                let works = JSON.parse(localStorage.getItem('works') || '[]');
+                
+                // 过滤掉要删除的作品
+                works = works.filter(work => work.id !== workId);
+                
+                // 保存回本地存储
+                localStorage.setItem('works', JSON.stringify(works));
+                
+                // 更新用户的作品列表
+                const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+                let users = JSON.parse(localStorage.getItem('users') || '[]');
+                
+                const userIndex = users.findIndex(u => u.id === currentUser.id);
+                if (userIndex !== -1) {
+                    if (users[userIndex].works) {
+                        users[userIndex].works = users[userIndex].works.filter(id => id !== workId);
+                        localStorage.setItem('users', JSON.stringify(users));
+                        localStorage.setItem('currentUser', JSON.stringify(users[userIndex]));
+                    }
+                }
+                
+                // 重新加载作品列表
+                const user = checkLoginStatus();
+                if (user) {
+                    loadUserWorks(user);
+                }
+                
+                showMessage('作品删除成功！', 'success');
+            }
+        }
+        
         // 退出登录
-        document.getElementById('logoutLink').addEventListener('click', function(e) {
-            e.preventDefault();
+        function logout() {
             localStorage.removeItem('currentUser');
-            showMessage('退出登录成功', 'success');
+            showMessage('已退出登录', 'success');
             setTimeout(() => {
                 window.location.href = 'index.html';
-            }, 1500);
-        });
+            }, 1000);
+        }
         
         // 显示消息
         function showMessage(text, type) {
@@ -342,6 +390,9 @@
             if (user) {
                 loadUserInfo(user);
                 loadUserWorks(user);
+            } else {
+                // 如果未登录，跳转到登录页面
+                window.location.href = 'auth.html';
             }
         };
     </script>
