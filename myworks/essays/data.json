@@ -1,0 +1,21 @@
+{
+  "users": [
+    {
+      "id": 1234567890,
+      "username": "testuser",
+      "password": "testpassword",
+      "works": []
+    }
+  ],
+  "works": [
+    {
+      "id": 9876543210,
+      "title": "测试作品",
+      "content": "这是一个测试作品，用于验证数据同步功能。",
+      "category": "随笔",
+      "author": "testuser",
+      "authorId": 1234567890,
+      "createdAt": "2026-03-25T03:39:08.974Z"
+    }
+  ]
+}
