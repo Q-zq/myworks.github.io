@@ -366,6 +366,18 @@
             localStorage.setItem('users', JSON.stringify(users));
         }
         
+        // 更新用户信息
+        function updateUser(updatedUser) {
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const userIndex = users.findIndex(u => u.id === updatedUser.id);
+            if (userIndex !== -1) {
+                users[userIndex] = updatedUser;
+                localStorage.setItem('users', JSON.stringify(users));
+                return true;
+            }
+            return false;
+        }
+        
         // 显示消息
         function showMessage(text, type) {
             const message = document.getElementById('message');
