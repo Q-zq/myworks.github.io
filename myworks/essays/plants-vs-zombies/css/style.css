@@ -1,0 +1,70 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Microsoft YaHei', Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+#game-container {
+    position: relative;
+    background: linear-gradient(145deg, #2d5016, #3d6b1f);
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 
+        0 0 50px rgba(0, 0, 0, 0.5),
+        inset 0 0 20px rgba(255, 255, 255, 0.1);
+    border: 3px solid #4a7c23;
+}
+
+#game-canvas {
+    display: block;
+    background: linear-gradient(180deg, #87CEEB 0%, #90EE90 30%, #228B22 100%);
+    border-radius: 10px;
+    box-shadow: 
+        inset 0 0 30px rgba(0, 0, 0, 0.2),
+        0 5px 15px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+}
+
+/* 添加一些装饰性元素 */
+#game-container::before {
+    content: '🌻 植物大战僵尸 🧟';
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 24px;
+    font-weight: bold;
+    color: #FFD700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    white-space: nowrap;
+}
+
+/* 响应式设计 */
+@media (max-width: 950px) {
+    #game-container {
+        transform: scale(0.9);
+        transform-origin: center;
+    }
+}
+
+@media (max-width: 850px) {
+    #game-container {
+        transform: scale(0.8);
+    }
+}
+
+@media (max-width: 750px) {
+    #game-container {
+        transform: scale(0.7);
+    }
+}
